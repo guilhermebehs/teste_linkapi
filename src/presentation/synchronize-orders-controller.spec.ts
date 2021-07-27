@@ -37,4 +37,11 @@ describe('SynchronizeOrdersController', () => {
     expect(httpResponse.body).toEqual(new InternalError())
     expect(httpResponse.statusCode).toBe(500)
   })
+  test('Should return 201 when success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.synchronize()
+    expect(httpResponse).toBeTruthy()
+    expect(httpResponse.body).toEqual({ message: 'sincronizado.' })
+    expect(httpResponse.statusCode).toBe(201)
+  })
 })
