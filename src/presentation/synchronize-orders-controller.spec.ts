@@ -1,3 +1,4 @@
+import { InternalError } from './errors/internal-error'
 import { SynchronizeOrders } from './protocols/syncronize-orders'
 import { SynchronizeOrdersController } from './sync-orders-controller'
 
@@ -27,5 +28,13 @@ describe('SynchronizeOrdersController', () => {
     const syncronizeOrdersSpy = jest.spyOn(syncronizeOrdersStub, 'synchronize')
     await sut.synchronize()
     expect(syncronizeOrdersSpy).toHaveBeenCalledTimes(1)
+  })
+  test('Should throw if SynchronizeOrders throws', async () => {
+    const { sut, syncronizeOrdersStub } = makeSut()
+    jest.spyOn(syncronizeOrdersStub, 'synchronize').mockImplementationOnce(() => { throw new InternalError() })
+    const httpResponse = await sut.synchronize()
+    expect(httpResponse).toBeTruthy()
+    expect(httpResponse.body).toEqual(new InternalError())
+    expect(httpResponse.statusCode).toBe(500)
   })
 })
