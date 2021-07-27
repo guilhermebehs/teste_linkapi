@@ -1,49 +1,102 @@
-import { ExportOrderAdapter } from './protocols/export-order-adapter'
+import { OpportunityModel } from './../domain/models/opportunity'
+import { InsertOrderRepository } from './protocols/insert-order-repository'
+import { GetOrderByIdRepository } from './protocols/get-order-by-Id-repository'
+import { OpportunityAdapter } from './protocols/opportunity-adapter'
 import { SynchronizeOrdersUseCase } from './synchronize-orders'
-import { ImportOrderAdapter } from './protocols/import-order-adapter'
+import { OrderAdapter } from './protocols/order-adapter'
 import { OrderModel } from '../domain/models/order'
 import { SynchronizeOrders } from '../domain/use-cases/synchronize-orders'
 
 interface SutTypes {
-  importOrderAdapterStub: ImportOrderAdapter
-  exportOrderAdapterStub: ExportOrderAdapter
+  opportunityAdapterStub: OpportunityAdapter
+  orderAdapterStub: OrderAdapter
+  getOrderByIdRepositoryStub: GetOrderByIdRepository
+  insertOrderRepositoryStub: InsertOrderRepository
   sut: SynchronizeOrders
 }
 
-const makeImportOrderAdapterStub = (): ImportOrderAdapter => {
-  class ImportOrderAdapterStub implements ImportOrderAdapter {
-    async import (): Promise<OrderModel[]> {
+const makeGetOrderByIdRepositoryStub = (): GetOrderByIdRepository => {
+  class GetOrderByIdRepositoryStub implements GetOrderByIdRepository {
+    async get (id: number): Promise<OrderModel | null> {
+      return null
+    }
+  }
+  return new GetOrderByIdRepositoryStub()
+}
+
+const makeInsertOrderRepositoryStub = (): InsertOrderRepository => {
+  class InsertOrderRepositoryStub implements InsertOrderRepository {
+    async insert (order: OrderModel): Promise<OrderModel> {
+      return order
+    }
+  }
+  return new InsertOrderRepositoryStub()
+}
+
+const makeOpportunityAdapterStub = (): OpportunityAdapter => {
+  class OpportunityAdapterStub implements OpportunityAdapter {
+    async import (): Promise<OpportunityModel[]> {
       return []
     }
   }
-  return new ImportOrderAdapterStub()
+  return new OpportunityAdapterStub()
 }
 
-const makeExportOrderAdapterStub = (): ExportOrderAdapter => {
-  class ExportOrderAdapterStub implements ExportOrderAdapter {
-    async export (products: OrderModel[]): Promise<void> {
+const makeOrderAdapterStub = (): OrderAdapter => {
+  class OrderAdapterStub implements OrderAdapter {
+    async import (): Promise<OrderModel[]> {
+      return []
+    }
+
+    async export (opportunities: OpportunityModel[]): Promise<void> {
     }
   }
-  return new ExportOrderAdapterStub()
+  return new OrderAdapterStub()
 }
 
 const makeSut = (): SutTypes => {
-  const importOrderAdapterStub = makeImportOrderAdapterStub()
-  const exportOrderAdapterStub = makeExportOrderAdapterStub()
-  const sut = new SynchronizeOrdersUseCase(importOrderAdapterStub, exportOrderAdapterStub)
-  return { exportOrderAdapterStub, importOrderAdapterStub, sut }
+  const orderAdapterStub = makeOrderAdapterStub()
+  const opportunityAdapterStub = makeOpportunityAdapterStub()
+  const insertOrderRepositoryStub = makeInsertOrderRepositoryStub()
+  const getOrderByIdRepositoryStub = makeGetOrderByIdRepositoryStub()
+  const sut = new SynchronizeOrdersUseCase(opportunityAdapterStub, orderAdapterStub)
+  return {
+    orderAdapterStub,
+    opportunityAdapterStub,
+    sut,
+    insertOrderRepositoryStub,
+    getOrderByIdRepositoryStub
+  }
 }
 
 describe('SynchronizeOrders UseCase', () => {
-  test('Should throws if ImportOrderAdapter throws', async () => {
-    const { sut, importOrderAdapterStub } = makeSut()
-    jest.spyOn(importOrderAdapterStub, 'import').mockImplementationOnce(() => { throw new Error() })
+  test('Should throws if OrderAdapter.import throws', async () => {
+    const { sut, orderAdapterStub } = makeSut()
+    jest.spyOn(orderAdapterStub, 'import').mockImplementationOnce(() => { throw new Error() })
     const promise = sut.synchronize()
     await expect(promise).rejects.toThrow()
   })
-  test('Should throws if ExportOrderAdapter throws', async () => {
-    const { sut, exportOrderAdapterStub } = makeSut()
-    jest.spyOn(exportOrderAdapterStub, 'export').mockImplementationOnce(() => { throw new Error() })
+  test('Should throws if OrderAdapter.export throws', async () => {
+    const { sut, orderAdapterStub } = makeSut()
+    jest.spyOn(orderAdapterStub, 'export').mockImplementationOnce(() => { throw new Error() })
+    const promise = sut.synchronize()
+    await expect(promise).rejects.toThrow()
+  })
+  test('Should throws if OpportunityAdapter throws', async () => {
+    const { sut, opportunityAdapterStub } = makeSut()
+    jest.spyOn(opportunityAdapterStub, 'import').mockImplementationOnce(() => { throw new Error() })
+    const promise = sut.synchronize()
+    await expect(promise).rejects.toThrow()
+  })
+  test('Should throws if GetOrderByIdRepository throws', async () => {
+    const { sut, getOrderByIdRepositoryStub } = makeSut()
+    jest.spyOn(getOrderByIdRepositoryStub, 'get').mockImplementationOnce(() => { throw new Error() })
+    const promise = sut.synchronize()
+    await expect(promise).rejects.toThrow()
+  })
+  test('Should throws if InsertOrderRepository throws', async () => {
+    const { sut, insertOrderRepositoryStub } = makeSut()
+    jest.spyOn(insertOrderRepositoryStub, 'insert').mockImplementationOnce(() => { throw new Error() })
     const promise = sut.synchronize()
     await expect(promise).rejects.toThrow()
   })
