@@ -1,4 +1,4 @@
 import { OrderModel } from '../../domain/models/order'
 export interface OrderAdapter{
-  export: (orders: OrderModel) => Promise<void>
+  export: (order: OrderModel) => Promise<void>
 }

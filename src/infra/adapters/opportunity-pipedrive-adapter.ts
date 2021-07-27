@@ -1,11 +1,14 @@
 import { OpportunityModel } from '../../domain/models/opportunity'
 import { OpportunityAdapter } from './../../implementation/protocols/opportunity-adapter'
+import dotenv from 'dotenv'
 import axios from 'axios'
+dotenv.config()
 export class OpportunityPipedriveAdapter implements OpportunityAdapter {
   async import (): Promise<OpportunityModel[]> {
+    const pipeDriveToken = process.env.PIPEDRIVE_KEY ?? ''
     const result = await axios({
-      url: 'https://nenhuma.pipedrive.com/api/v1/deals?api_token=5bd7ab68960788c5c85133e6d9e3e7fbcd3e7f38&status=won',
-      method: 'GET'
+      url: `https://nenhuma.pipedrive.com/api/v1/deals?api_token=${pipeDriveToken}&status=won`,
+      method: 'POST'
     })
     const { data } = result
     return this.mapDataToOpportunity(data)
