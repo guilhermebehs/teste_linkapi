@@ -35,4 +35,9 @@ describe('GetOrderByIdMongo Repository', () => {
     const order = await sut.get('1')
     expect(order).toBeTruthy()
   })
+  test('Should return undefined when not exists', async () => {
+    const { sut } = makeSut()
+    const order = await sut.get('1')
+    expect(order).toBeFalsy()
+  })
 })
