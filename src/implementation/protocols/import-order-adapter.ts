@@ -1,4 +1,4 @@
-import { RetrievedOrderModel } from './../../domain/models/retrieved-order'
+import { OrderModel } from '../../domain/models/order'
 export interface ImportOrderAdapter{
-  import: () => Promise<RetrievedOrderModel[]>
+  import: () => Promise<OrderModel[]>
 }
