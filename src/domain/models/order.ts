@@ -6,9 +6,6 @@ export interface OrderProductModel{
 }
 export interface OrderModel {
   id: string
-  salerId: string
-  salerName: string
-  clientId: string
   clientName: string
   wonTime: string
   products: OrderProductModel
