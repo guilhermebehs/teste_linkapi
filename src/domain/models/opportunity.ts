@@ -1,7 +1,6 @@
 export interface OpportunityProductModel{
   id: string
   description: string
-  quantity: number
   value: number
 }
 export interface OpportunityModel {
