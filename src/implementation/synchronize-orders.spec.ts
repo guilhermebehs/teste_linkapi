@@ -17,7 +17,7 @@ interface SutTypes {
 
 const makeGetOrderByIdRepositoryStub = (): GetOrderByIdRepository => {
   class GetOrderByIdRepositoryStub implements GetOrderByIdRepository {
-    async get (id: number): Promise<OrderModel | null> {
+    async get (id: string): Promise<OrderModel | null> {
       return null
     }
   }
@@ -36,7 +36,14 @@ const makeInsertOrderRepositoryStub = (): InsertOrderRepository => {
 const makeOpportunityAdapterStub = (): OpportunityAdapter => {
   class OpportunityAdapterStub implements OpportunityAdapter {
     async import (): Promise<OpportunityModel[]> {
-      return []
+      const opportunity: OpportunityModel = {
+        id: 'any_id',
+        salerName: 'any_name',
+        clientName: 'any_name',
+        products: [],
+        wonTime: 'any_date'
+      }
+      return [opportunity]
     }
   }
   return new OpportunityAdapterStub()
@@ -44,11 +51,7 @@ const makeOpportunityAdapterStub = (): OpportunityAdapter => {
 
 const makeOrderAdapterStub = (): OrderAdapter => {
   class OrderAdapterStub implements OrderAdapter {
-    async import (): Promise<OrderModel[]> {
-      return []
-    }
-
-    async export (opportunities: OpportunityModel[]): Promise<void> {
+    async export (orders: OrderModel): Promise<void> {
     }
   }
   return new OrderAdapterStub()
@@ -59,7 +62,11 @@ const makeSut = (): SutTypes => {
   const opportunityAdapterStub = makeOpportunityAdapterStub()
   const insertOrderRepositoryStub = makeInsertOrderRepositoryStub()
   const getOrderByIdRepositoryStub = makeGetOrderByIdRepositoryStub()
-  const sut = new SynchronizeOrdersUseCase(opportunityAdapterStub, orderAdapterStub)
+  const sut = new SynchronizeOrdersUseCase(
+    opportunityAdapterStub,
+    orderAdapterStub,
+    insertOrderRepositoryStub,
+    getOrderByIdRepositoryStub)
   return {
     orderAdapterStub,
     opportunityAdapterStub,
@@ -70,12 +77,6 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SynchronizeOrders UseCase', () => {
-  test('Should throws if OrderAdapter.import throws', async () => {
-    const { sut, orderAdapterStub } = makeSut()
-    jest.spyOn(orderAdapterStub, 'import').mockImplementationOnce(() => { throw new Error() })
-    const promise = sut.synchronize()
-    await expect(promise).rejects.toThrow()
-  })
   test('Should throws if OrderAdapter.export throws', async () => {
     const { sut, orderAdapterStub } = makeSut()
     jest.spyOn(orderAdapterStub, 'export').mockImplementationOnce(() => { throw new Error() })
