@@ -1,3 +1,5 @@
+import { OrderModel } from './../domain/models/order'
+import { OpportunityModel } from './../domain/models/opportunity'
 import { GetOrderByIdRepository } from './protocols/get-order-by-Id-repository'
 import { InsertOrderRepository } from './protocols/insert-order-repository'
 import { OpportunityAdapter } from './protocols/opportunity-adapter'
@@ -12,9 +14,27 @@ export class SynchronizeOrdersUseCase implements SynchronizeOrders {
     private readonly getOrderByIdRepository: GetOrderByIdRepository) {}
 
   async synchronize (): Promise<void> {
-    await this.opportunityAdapter.import()
-    await this.orderAdapter.export([])
-    await this.getOrderByIdRepository.get(1)
-    await this.orderAdapter.import()
+    const opportunities = await this.opportunityAdapter.import()
+    await this.insertNewOrders(opportunities)
+  }
+
+  private async insertNewOrders (opportunities: OpportunityModel[]): Promise<OrderModel[]> {
+    const newOrders: OrderModel[] = []
+    await Promise.all(opportunities.map(async (opportunity) => {
+      const { id } = opportunity
+      const orderExists = await this.getOrderByIdRepository.get(id)
+      if (!orderExists) {
+        const newOrder = this.mapOpportunityToOrder(opportunity)
+        await this.insertOrderRepository.insert(newOrder)
+        await this.orderAdapter.export(newOrder)
+      }
+    }))
+    return newOrders
+  }
+
+  private mapOpportunityToOrder (opportunity: OpportunityModel): OrderModel {
+    const { id, products, salerName, wonTime, clientName } = opportunity
+    const order: OrderModel = { id, salerName, clientName, products, wonTime }
+    return order
   }
 }

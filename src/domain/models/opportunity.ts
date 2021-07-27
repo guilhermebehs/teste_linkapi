@@ -6,10 +6,8 @@ export interface OpportunityProductModel{
 }
 export interface OpportunityModel {
   id: string
-  salerId: string
   salerName: string
-  clientId: string
   clientName: string
   wonTime: string
-  products: OpportunityProductModel
+  products: OpportunityProductModel[]
 }

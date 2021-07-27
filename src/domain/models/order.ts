@@ -7,6 +7,7 @@ export interface OrderProductModel{
 export interface OrderModel {
   id: string
   clientName: string
+  salerName: string
   wonTime: string
-  products: OrderProductModel
+  products: OrderProductModel[]
 }
