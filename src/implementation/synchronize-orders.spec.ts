@@ -17,8 +17,8 @@ interface SutTypes {
 
 const makeGetOrderByIdRepositoryStub = (): GetOrderByIdRepository => {
   class GetOrderByIdRepositoryStub implements GetOrderByIdRepository {
-    async get (id: string): Promise<OrderModel | null> {
-      return null
+    async get (id: string): Promise<OrderModel | undefined> {
+      return undefined
     }
   }
   return new GetOrderByIdRepositoryStub()

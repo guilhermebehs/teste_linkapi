@@ -1,4 +1,4 @@
 import { OrderModel } from './../../domain/models/order'
 export interface GetOrderByIdRepository{
-  get: (id: string) => Promise<OrderModel | null>
+  get: (id: string) => Promise<OrderModel | undefined>
 }

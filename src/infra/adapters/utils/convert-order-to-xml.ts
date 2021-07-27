@@ -1,4 +1,4 @@
-import { OrderModel } from '../src/domain/models/order'
+import { OrderModel } from '../../../domain/models/order'
 import { json2xml } from 'xml-js'
 
 export class ConvertOrderToXml {
