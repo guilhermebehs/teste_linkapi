@@ -7,7 +7,7 @@ export class GetOrdersController {
     try {
       const orders = await this.getOrders.get()
       return {
-        statusCode: 201,
+        statusCode: 200,
         body: { orders }
       }
     } catch (e) {
