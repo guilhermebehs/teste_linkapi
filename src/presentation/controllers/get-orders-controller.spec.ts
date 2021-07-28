@@ -3,7 +3,7 @@ import { OrderModel } from '../../domain/models/order'
 import { GetOrders } from './../../domain/use-cases/get-orders'
 import { InternalError } from './errors/internal-error'
 
-const data = [{
+const orders = [{
   id: '1',
   clientName: 'any_name',
   salerName: 'any_name',
@@ -13,7 +13,7 @@ const data = [{
 
 class GetOrdersStub implements GetOrders {
   async get (): Promise<OrderModel[]> {
-    return data
+    return orders
   }
 }
 
@@ -40,5 +40,12 @@ describe('GetOrdersController', () => {
     expect(httpResponse).toBeTruthy()
     expect(httpResponse.body).toEqual(new InternalError())
     expect(httpResponse.statusCode).toBe(500)
+  })
+  test('Should return 200 and orders when success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.get()
+    expect(httpResponse).toBeTruthy()
+    expect(httpResponse.body).toEqual({ orders })
+    expect(httpResponse.statusCode).toBe(200)
   })
 })
