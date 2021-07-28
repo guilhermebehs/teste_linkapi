@@ -1,5 +1,5 @@
 import { SyncOrdersExpressAdapterComposer } from './composers/sync-orders-express-adapter-composer'
-import express, { Request, Response } from 'express'
+import express from 'express'
 
 export class App {
   createApp (): any {
