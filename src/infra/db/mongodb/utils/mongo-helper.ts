@@ -1,3 +1,4 @@
+import { OrderModel } from './../../../../domain/models/order'
 import { Collection, MongoClient } from 'mongodb'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -11,7 +12,7 @@ export const MongoHelper = {
   async disconnect (): Promise<void> {
     await this.client.close()
   },
-  async getCollection (name: string): Promise<Collection<any>> {
+  async getCollection (name: string): Promise<Collection<OrderModel>> {
     if (!this.client) {
       await this.connect(this.uri)
     }
