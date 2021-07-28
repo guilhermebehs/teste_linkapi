@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build":"tsc",
     "dev":"ts-node-dev --respawn --transpile-only src/main/index.ts",
     "test": "jest --passWithNoTests --watch --runInBand --no-cache",
     "test:ci": "npm test -- --coverage"
