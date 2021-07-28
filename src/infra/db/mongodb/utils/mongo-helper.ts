@@ -1,4 +1,7 @@
 import { Collection, MongoClient } from 'mongodb'
+import dotenv from 'dotenv'
+dotenv.config()
+
 export const MongoHelper = {
   client: null as unknown as MongoClient,
   uri: process.env.MONGO_URL ?? '',

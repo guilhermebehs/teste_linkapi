@@ -8,10 +8,10 @@ export class OpportunityPipedriveAdapter implements OpportunityAdapter {
     const pipeDriveToken = process.env.PIPEDRIVE_KEY ?? ''
     const result = await axios({
       url: `https://nenhuma.pipedrive.com/api/v1/deals?api_token=${pipeDriveToken}&status=won`,
-      method: 'POST'
+      method: 'GET'
     })
     const { data } = result
-    return this.mapDataToOpportunity(data)
+    return this.mapDataToOpportunity(data.data)
   }
 
   private mapDataToOpportunity (data: any[]): OpportunityModel[] {
