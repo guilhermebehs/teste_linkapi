@@ -17,9 +17,9 @@ describe('OrderBling Adapter', () => {
       id: 'any_id',
       salerName: 'any_name',
       clientName: 'any_name',
+      totalValue: 100,
       products: [{
         id: '1',
-        value: 5,
         description: 'teste'
       }],
       wonTime: '2020-01-02'

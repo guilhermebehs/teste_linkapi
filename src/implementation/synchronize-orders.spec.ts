@@ -1,3 +1,4 @@
+import { SynchronizeOrders } from './../presentation/controllers/protocols/syncronize-orders'
 import { OpportunityModel } from './../domain/models/opportunity'
 import { InsertOrderRepository } from './protocols/insert-order-repository'
 import { GetOrderByIdRepository } from './protocols/get-order-by-Id-repository'
@@ -5,7 +6,6 @@ import { OpportunityAdapter } from './protocols/opportunity-adapter'
 import { SynchronizeOrdersUseCase } from './synchronize-orders'
 import { OrderAdapter } from './protocols/order-adapter'
 import { OrderModel } from '../domain/models/order'
-import { SynchronizeOrders } from '../domain/use-cases/synchronize-orders'
 
 interface SutTypes {
   opportunityAdapterStub: OpportunityAdapter
@@ -41,7 +41,8 @@ const makeOpportunityAdapterStub = (): OpportunityAdapter => {
         salerName: 'any_name',
         clientName: 'any_name',
         products: [],
-        wonTime: 'any_date'
+        wonTime: 'any_date',
+        totalValue: 500
       }
       return [opportunity]
     }

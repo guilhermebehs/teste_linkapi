@@ -1,4 +1,5 @@
-import { GetOrdersMongoRepository } from './get-orders-mongo-repository'
+import { GroupedOrdersModel } from './../../../domain/models/grouped-orders'
+import { GetGroupedOrdersMongoRepository } from './get-grouped-orders-mongo-repository'
 import { MongoHelper } from './utils/mongo-helper'
 const ordersToInsert = [
   {
@@ -6,34 +7,37 @@ const ordersToInsert = [
     clientName: 'any_name',
     salerName: 'any_name',
     wonTime: '2020-02-01',
+    totalValue: 200,
     products: []
   },
   {
     id: '2',
     clientName: 'any_name2',
     salerName: 'any_name2',
-    wonTime: '2021-03-05',
+    wonTime: '2021-03-01',
+    totalValue: 50,
     products: []
   },
   {
     id: '3',
     clientName: 'any_name3',
     salerName: 'any_name3',
-    wonTime: '2012-03-10',
+    wonTime: '2021-03-01',
+    totalValue: 60,
     products: []
   }
 ]
 
 interface SutTypes{
-  sut: GetOrdersMongoRepository
+  sut: GetGroupedOrdersMongoRepository
 }
 
 const makeSut = (): SutTypes => {
-  const sut = new GetOrdersMongoRepository()
+  const sut = new GetGroupedOrdersMongoRepository()
   return { sut }
 }
 
-describe('GetOrdersMongo Repository', () => {
+describe('GetGroupedOrdersMongo Repository', () => {
   beforeAll(async () => {
     const mongoUrl = process.env.MONGO_URL ?? ''
     await MongoHelper.connect(mongoUrl)
@@ -45,11 +49,19 @@ describe('GetOrdersMongo Repository', () => {
   afterAll(async () => {
     await MongoHelper.disconnect()
   })
-  test('Should return all inserted orders when exists', async () => {
+  test('Should return grouped orders when exists', async () => {
     const { sut } = makeSut()
     const orderCollection = await MongoHelper.getCollection('order')
     await orderCollection.insertMany(ordersToInsert)
     const orders = await sut.get()
-    expect(orders).toEqual(ordersToInsert)
+    const groupedOrders: GroupedOrdersModel[] = [{
+      data: '2021-03-01',
+      valorTotal: 110
+    },
+    {
+      data: '2020-02-01',
+      valorTotal: 200
+    }]
+    expect(orders).toEqual(groupedOrders)
   })
 })

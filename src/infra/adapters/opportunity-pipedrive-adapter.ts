@@ -19,13 +19,13 @@ export class OpportunityPipedriveAdapter implements OpportunityAdapter {
     const opportunities: OpportunityModel[] = data.map((d) => {
       return {
         id: String(d.id),
-        wonTime: d.won_time,
+        wonTime: d.won_time.split(' ')[0],
+        totalValue: d.value,
         clientName: d.person_name,
         salerName: d.owner_name,
         products: [{
           id: '1',
-          description: 'produto',
-          value: d.value
+          description: 'produto'
         }]
       }
     })

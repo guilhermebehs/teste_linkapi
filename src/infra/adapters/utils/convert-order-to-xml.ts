@@ -12,8 +12,8 @@ export class ConvertOrderToXml {
           item: {
             codigo: p.id,
             descricao: p.description,
-            qtde: p.value,
-            vlr_unit: p.value
+            qtde: 1,
+            vlr_unit: 10
           }
         }))
       }

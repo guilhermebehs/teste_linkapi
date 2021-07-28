@@ -1,10 +1,10 @@
+import { SynchronizeOrders } from './../presentation/controllers/protocols/syncronize-orders'
 import { OrderModel } from './../domain/models/order'
 import { OpportunityModel } from './../domain/models/opportunity'
 import { GetOrderByIdRepository } from './protocols/get-order-by-Id-repository'
 import { InsertOrderRepository } from './protocols/insert-order-repository'
 import { OpportunityAdapter } from './protocols/opportunity-adapter'
 import { OrderAdapter } from './protocols/order-adapter'
-import { SynchronizeOrders } from '../domain/use-cases/synchronize-orders'
 
 export class SynchronizeOrdersUseCase implements SynchronizeOrders {
   constructor (
@@ -33,8 +33,8 @@ export class SynchronizeOrdersUseCase implements SynchronizeOrders {
   }
 
   private mapOpportunityToOrder (opportunity: OpportunityModel): OrderModel {
-    const { id, products, salerName, wonTime, clientName } = opportunity
-    const order: OrderModel = { id, salerName, clientName, products, wonTime }
+    const { id, products, salerName, wonTime, clientName, totalValue } = opportunity
+    const order: OrderModel = { id, salerName, clientName, products, wonTime, totalValue }
     return order
   }
 }

@@ -30,6 +30,7 @@ describe('GetOrderByIdMongo Repository', () => {
       clientName: 'any_name',
       salerName: 'any_name',
       wonTime: '2020-02-01',
+      totalValue: 100,
       products: []
     })
     const order = await sut.get('1')

@@ -1,16 +1,16 @@
-import { GetOrdersUseCases } from './../../implementation/get-orders'
-import { GetOrdersMongoRepository } from './../../infra/db/mongodb/get-orders-mongo-repository'
-import { GetOrdersController } from './../../presentation/controllers/get-orders-controller'
-import { GetOrdersRouter } from './../../presentation/routers/get-orders-router'
-import { GetOrdersExpressAdapter } from './../routers/get-orders-express-adapter'
+import { GetGroupedOrdersRouter } from './../../presentation/routers/get-grouped-orders-router'
+import { GetGroupedOrdersController } from './../../presentation/controllers/get-grouped-orders-controller'
+import { GetGroupedOrdersExpressAdapter } from './../routers/get-grouped-orders-express-adapter'
+import { GetGroupedOrdersUseCases } from './../../implementation/get-grouped-orders'
+import { GetGroupedOrdersMongoRepository } from '../../infra/db/mongodb/get-grouped-orders-mongo-repository'
 
-export class GetOrdersExpressAdapterComposer {
-  static compose (): GetOrdersExpressAdapter {
-    const getOrdersMongoRepository = new GetOrdersMongoRepository()
-    const getOrdersUseCase = new GetOrdersUseCases(getOrdersMongoRepository)
-    const getOrdersController = new GetOrdersController(getOrdersUseCase)
-    const getOrdersRouter = new GetOrdersRouter(getOrdersController)
-    const getOrdersExpressAdapter = new GetOrdersExpressAdapter(getOrdersRouter)
-    return getOrdersExpressAdapter
+export class GetGroupedOrdersExpressAdapterComposer {
+  static compose (): GetGroupedOrdersExpressAdapter {
+    const getGroupedOrdersMongoRepository = new GetGroupedOrdersMongoRepository()
+    const getGroupedOrdersUseCase = new GetGroupedOrdersUseCases(getGroupedOrdersMongoRepository)
+    const getGroupedOrdersController = new GetGroupedOrdersController(getGroupedOrdersUseCase)
+    const getGroupedOrdersRouter = new GetGroupedOrdersRouter(getGroupedOrdersController)
+    const getGroupedOrdersExpressAdapter = new GetGroupedOrdersExpressAdapter(getGroupedOrdersRouter)
+    return getGroupedOrdersExpressAdapter
   }
 }

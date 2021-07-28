@@ -1,3 +1,4 @@
+import { OrderModel } from './../../../domain/models/order'
 import { InsertOrderMongoRepository } from './insert-order-mongo-repository'
 import { MongoHelper } from './utils/mongo-helper'
 import { InsertOrderRepository } from '../../../implementation/protocols/insert-order-repository'
@@ -25,11 +26,12 @@ describe('InsertOrderMongo Repository', () => {
   test('Should insert and return correct data', async () => {
     const { sut } = makeSut()
     const orderCollection = await MongoHelper.getCollection('order')
-    const insertedOrder = {
+    const insertedOrder: OrderModel = {
       id: '1',
       clientName: 'any_name',
       salerName: 'any_name',
       wonTime: '2020-02-01',
+      totalValue: 100,
       products: []
     }
     await sut.insert(insertedOrder)

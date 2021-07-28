@@ -1,14 +1,14 @@
-import { GetOrders } from './../../domain/use-cases/get-orders'
+import { GetGroupedOrders } from '../../domain/use-cases/get-grouped-orders'
 import { InternalError } from './errors/internal-error'
 import { HttpResponse } from './protocols/http-response'
-export class GetOrdersController {
-  constructor (private readonly getOrders: GetOrders) {}
+export class GetGroupedOrdersController {
+  constructor (private readonly getGroupedOrders: GetGroupedOrders) {}
   async get (): Promise<HttpResponse> {
     try {
-      const orders = await this.getOrders.get()
+      const totalPorDia = await this.getGroupedOrders.get()
       return {
         statusCode: 200,
-        body: { orders }
+        body: { totalPorDia }
       }
     } catch (e) {
       return {
