@@ -20,7 +20,7 @@ export class OpportunityPipedriveAdapter implements OpportunityAdapter {
       return {
         id: String(d.id),
         wonTime: d.won_time,
-        clientName: d.person_id.name,
+        clientName: d.person_name,
         salerName: d.owner_name,
         products: [{
           id: '1',
