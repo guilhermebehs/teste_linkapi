@@ -29,7 +29,7 @@ describe('SynchronizeOrdersController', () => {
     await sut.synchronize()
     expect(syncronizeOrdersSpy).toHaveBeenCalledTimes(1)
   })
-  test('Should throw if SynchronizeOrders throws', async () => {
+  test('Should return 500 if SynchronizeOrders throws', async () => {
     const { sut, syncronizeOrdersStub } = makeSut()
     jest.spyOn(syncronizeOrdersStub, 'synchronize').mockImplementationOnce(() => { throw new InternalError() })
     const httpResponse = await sut.synchronize()
