@@ -2,9 +2,10 @@
   "name": "linkapi_teste",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build":"tsc",
+    "start":" node dist/main/index.js",
+    "buildAndRun": "npm run build && npm start",
     "dev":"ts-node-dev --respawn --transpile-only src/main/index.ts",
     "test": "jest --passWithNoTests --watch --runInBand --no-cache",
     "test:ci": "npm test -- --coverage"
