@@ -1,5 +1,5 @@
-import { InternalError } from '../presentation/errors/internal-error'
-import { HttpResponse } from '../presentation/protocols/http-response'
+import { InternalError } from './../presentation/controllers/errors/internal-error'
+import { HttpResponse } from './../presentation/controllers/protocols/http-response'
 
 export const serverError = (): HttpResponse => ({
 
