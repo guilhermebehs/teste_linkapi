@@ -102,4 +102,9 @@ describe('SynchronizeOrders UseCase', () => {
     const promise = sut.synchronize()
     await expect(promise).rejects.toThrow()
   })
+  test('Should resolves when synchronize success', async () => {
+    const { sut } = makeSut()
+    const promise = sut.synchronize()
+    await expect(promise).resolves.toBe(undefined)
+  })
 })
