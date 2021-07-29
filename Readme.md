@@ -15,5 +15,5 @@
   #### Sincronizar as oportunidades:
       POST /sync-orders
    #### Retornar os pedidos agrupados por dia e valor:
-      GET /orders:     
+      GET /orders    
   
