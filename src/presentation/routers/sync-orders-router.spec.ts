@@ -34,4 +34,10 @@ describe('SyncOrders Router', () => {
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new InternalError())
   })
+  test('Should return 201 when SyncOrders success', async () => {
+    const { sut } = makeSut()
+    const httpResponse: HttpResponse = await sut.route({})
+    expect(httpResponse).toBeTruthy()
+    expect(httpResponse.statusCode).toBe(201)
+  })
 })
