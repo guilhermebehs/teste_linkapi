@@ -6,8 +6,9 @@ dotenv.config()
 export class OpportunityPipedriveAdapter implements OpportunityAdapter {
   async import (): Promise<OpportunityModel[]> {
     const pipeDriveToken = process.env.PIPEDRIVE_KEY ?? ''
+    const accountName = process.env.PIPEDRIVE_ACCOUNT_NAME ?? ''
     const result = await axios({
-      url: `https://nenhuma.pipedrive.com/api/v1/deals?api_token=${pipeDriveToken}&status=won`,
+      url: `https://${accountName}.pipedrive.com/api/v1/deals?api_token=${pipeDriveToken}&status=won`,
       method: 'GET'
     })
     const { data } = result
