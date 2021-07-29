@@ -10,6 +10,24 @@ const ordersToInsert = [
     totalValue: 200,
     products: []
   },
+
+  {
+    id: '3',
+    clientName: 'any_name3',
+    salerName: 'any_name3',
+    wonTime: '2021-03-01',
+    totalValue: 60,
+    products: []
+  },
+
+  {
+    id: '4',
+    clientName: 'any_name4',
+    salerName: 'any_name4',
+    wonTime: '2020-02-01',
+    totalValue: 100,
+    products: []
+  },
   {
     id: '2',
     clientName: 'any_name2',
@@ -19,11 +37,19 @@ const ordersToInsert = [
     products: []
   },
   {
-    id: '3',
-    clientName: 'any_name3',
-    salerName: 'any_name3',
-    wonTime: '2021-03-01',
-    totalValue: 60,
+    id: '5',
+    clientName: 'any_name5',
+    salerName: 'any_name5',
+    wonTime: '2020-02-10',
+    totalValue: 200,
+    products: []
+  },
+  {
+    id: '6',
+    clientName: 'any_name6',
+    salerName: 'any_name6',
+    wonTime: '2020-02-10',
+    totalValue: 200,
     products: []
   }
 ]
@@ -59,8 +85,12 @@ describe('GetGroupedOrdersMongo Repository', () => {
       valorTotal: 110
     },
     {
+      data: '2020-02-10',
+      valorTotal: 400
+    },
+    {
       data: '2020-02-01',
-      valorTotal: 200
+      valorTotal: 300
     }]
     expect(orders).toEqual(groupedOrders)
   })
