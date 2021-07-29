@@ -3,6 +3,7 @@ import { GetGroupedOrdersRouter } from './get-grouped-orders-router'
 import { HttpResponse } from './../controllers/protocols/http-response'
 import { GroupedOrdersModel } from '../../domain/models/grouped-orders'
 import { GetGroupedOrdersController } from '../controllers/get-grouped-orders-controller'
+import { InternalError } from '../controllers/errors/internal-error'
 
 interface SutTypes{
   getGroupedOrdersStub: GetGroupedOrders
@@ -32,6 +33,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('GetGroupedOrders Router', () => {
+  test('Should return 500 when GetGroupedOrders throws', async () => {
+    const { sut, getGroupedOrdersStub } = makeSut()
+    jest.spyOn(getGroupedOrdersStub, 'get').mockImplementationOnce(() => { throw new Error() })
+    const httpResponse: HttpResponse = await sut.route({})
+    expect(httpResponse).toBeTruthy()
+    expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new InternalError())
+  })
   test('Should return same data returned by GetGroupedOrdersController', async () => {
     const { sut } = makeSut()
     const httpResponse: HttpResponse = await sut.route({})
