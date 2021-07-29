@@ -1,3 +1,4 @@
+import { OrderModel } from './../domain/models/order'
 import { SynchronizeOrders } from './../presentation/controllers/protocols/syncronize-orders'
 import { OpportunityModel } from './../domain/models/opportunity'
 import { InsertOrderRepository } from './protocols/insert-order-repository'
@@ -5,7 +6,6 @@ import { GetOrderByIdRepository } from './protocols/get-order-by-Id-repository'
 import { OpportunityAdapter } from './protocols/opportunity-adapter'
 import { SynchronizeOrdersUseCase } from './synchronize-orders'
 import { OrderAdapter } from './protocols/order-adapter'
-import { OrderModel } from '../domain/models/order'
 
 interface SutTypes {
   opportunityAdapterStub: OpportunityAdapter
@@ -18,6 +18,16 @@ interface SutTypes {
 const makeGetOrderByIdRepositoryStub = (): GetOrderByIdRepository => {
   class GetOrderByIdRepositoryStub implements GetOrderByIdRepository {
     async get (id: string): Promise<OrderModel | undefined> {
+      if (id === 'any_id2') {
+        return {
+          id: 'any_id2',
+          salerName: 'any_name2',
+          clientName: 'any_name2',
+          products: [],
+          wonTime: 'any_date',
+          totalValue: 1000
+        }
+      }
       return undefined
     }
   }
@@ -36,15 +46,22 @@ const makeInsertOrderRepositoryStub = (): InsertOrderRepository => {
 const makeOpportunityAdapterStub = (): OpportunityAdapter => {
   class OpportunityAdapterStub implements OpportunityAdapter {
     async import (): Promise<OpportunityModel[]> {
-      const opportunity: OpportunityModel = {
+      const opportunities: OpportunityModel[] = [{
         id: 'any_id',
         salerName: 'any_name',
         clientName: 'any_name',
         products: [],
         wonTime: 'any_date',
         totalValue: 500
-      }
-      return [opportunity]
+      }, {
+        id: 'any_id2',
+        salerName: 'any_name2',
+        clientName: 'any_name2',
+        products: [],
+        wonTime: 'any_date',
+        totalValue: 1000
+      }]
+      return opportunities
     }
   }
   return new OpportunityAdapterStub()
@@ -102,9 +119,18 @@ describe('SynchronizeOrders UseCase', () => {
     const promise = sut.synchronize()
     await expect(promise).rejects.toThrow()
   })
-  test('Should resolves when synchronize success', async () => {
-    const { sut } = makeSut()
-    const promise = sut.synchronize()
-    await expect(promise).resolves.toBe(undefined)
+  test('Should insert only new orders', async () => {
+    const { sut, insertOrderRepositoryStub } = makeSut()
+    const insertOrderRepositoryStubSpy = jest.spyOn(insertOrderRepositoryStub, 'insert')
+    await sut.synchronize()
+    expect(insertOrderRepositoryStubSpy).toBeCalledTimes(1)
+    expect(insertOrderRepositoryStubSpy).toBeCalledWith({
+      id: 'any_id',
+      salerName: 'any_name',
+      clientName: 'any_name',
+      products: [],
+      wonTime: 'any_date',
+      totalValue: 500
+    })
   })
 })
