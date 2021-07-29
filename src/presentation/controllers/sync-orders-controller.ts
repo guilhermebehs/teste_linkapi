@@ -1,4 +1,4 @@
-import { InternalError } from './errors/internal-error'
+import { created, serverError } from './../../helpers/http-helper'
 import { HttpResponse } from './protocols/http-response'
 import { SynchronizeOrders } from './protocols/syncronize-orders'
 
@@ -7,15 +7,9 @@ export class SynchronizeOrdersController {
   async synchronize (): Promise<HttpResponse> {
     try {
       await this.syncronizeOrders.synchronize()
-      return {
-        statusCode: 201,
-        body: { message: 'sincronizado.' }
-      }
+      return created({ message: 'sincronizado.' })
     } catch (e) {
-      return {
-        statusCode: 500,
-        body: new InternalError()
-      }
+      return serverError()
     }
   }
 }
