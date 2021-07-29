@@ -18,8 +18,7 @@ export class SynchronizeOrdersUseCase implements SynchronizeOrders {
     await this.insertNewOrders(opportunities)
   }
 
-  private async insertNewOrders (opportunities: OpportunityModel[]): Promise<OrderModel[]> {
-    const newOrders: OrderModel[] = []
+  private async insertNewOrders (opportunities: OpportunityModel[]): Promise<void> {
     await Promise.all(opportunities.map(async (opportunity) => {
       const { id } = opportunity
       const orderExists = await this.getOrderByIdRepository.get(id)
@@ -29,7 +28,6 @@ export class SynchronizeOrdersUseCase implements SynchronizeOrders {
         await this.orderAdapter.export(newOrder)
       }
     }))
-    return newOrders
   }
 
   private mapOpportunityToOrder (opportunity: OpportunityModel): OrderModel {
